@@ -9,7 +9,7 @@ const AppoinButton = ({ children }) => {
   return (
     <button
       onClick={openModal}
-      className="w-full bg-[#65cc39] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#65cc39]/70 focus:outline-none transition-transform transform hover:scale-105 shadow-lg"
+      className="w-full cursor-pointer bg-[#65cc39] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#65cc39]/70 focus:outline-none transition-transform transform hover:scale-105 shadow-lg"
     >
       {children || "Book Appointment"}
     </button>

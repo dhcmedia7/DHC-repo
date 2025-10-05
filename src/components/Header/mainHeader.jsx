@@ -107,6 +107,7 @@ const Header = () => {
                   width={150}
                   height={50}
                   alt="Logo"
+                  
                 />
               </Link>
 
@@ -119,7 +120,7 @@ const Header = () => {
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-3">
             {navItems.map((item) => (
               <div key={item.name} className="relative group">
-                <a
+                <Link
                   href={item.href}
                   className="flex items-center space-x-1 text-gray-700 hover:text-blue-500 font-medium transition-all duration-200 py-2.5 px-3 xl:px-4 rounded-lg hover:bg-blue-50 group"
                   style={{ fontFamily: "Noto Sans Bengali, Arial, sans-serif" }}
@@ -128,14 +129,14 @@ const Header = () => {
                   {item.hasDropdown && (
                     <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                   )}
-                </a>
+                </Link>
 
                 {/* Dropdown Menu */}
                 {item.hasDropdown && item.subItems && (
                   <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <div className="py-2">
                       {item.subItems.map((subItem) => (
-                        <a
+                        <Link
                           key={subItem.name}
                           href={subItem.href}
                           className="block px-4 py-3 text-gray-700 hover:text-blue-500 hover:bg-blue-50 transition-colors text-sm font-medium"
@@ -144,7 +145,7 @@ const Header = () => {
                           }}
                         >
                           {subItem.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -157,14 +158,14 @@ const Header = () => {
           {/* Right Section - CTA & Mobile Menu */}
           <div className="flex items-center space-x-3">
             {/* Phone Button - Desktop */}
-            <a
+            <Link
               href="tel:+8801777276072"
               className="hidden sm:flex items-center space-x-2 text-gray-700 hover:text-green-600 font-medium py-2 px-3 rounded-lg hover:bg-green-50 transition-all duration-200"
               style={{ fontFamily: "Noto Sans Bengali, Arial, sans-serif" }}
             >
               <Phone className="w-4 h-4" />
               <span className="hidden md:block">কল করুন</span>
-            </a>
+            </Link>
             {/* Appointment Button - Desktop */}
             <div className="hidden md:flex">
               <AppoinButton>অ্যাপয়েন্টমেন্ট নিন</AppoinButton>
@@ -205,7 +206,7 @@ const Header = () => {
               {navItems.map((item) => (
                 <div key={item.name}>
                   <div className="flex items-center justify-between">
-                    <a
+                    <Link
                       href={item.href}
                       className="flex-1 text-gray-700 hover:text-blue-400 hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-colors"
                       style={{
@@ -216,7 +217,7 @@ const Header = () => {
                       }
                     >
                       {item.name}
-                    </a>
+                    </Link>
 
                     {item.hasDropdown && (
                       <button
@@ -247,7 +248,7 @@ const Header = () => {
                     >
                       <div className="pl-4 space-y-1 py-2">
                         {item.subItems.map((subItem) => (
-                          <a
+                          <Link
                             key={subItem.name}
                             href={subItem.href}
                             className="block text-gray-600 hover:text-blue-400 hover:bg-blue-50 py-2.5 px-4 rounded-lg transition-colors text-sm"
@@ -258,7 +259,7 @@ const Header = () => {
                             onClick={closeMenu}
                           >
                             {subItem.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                       {installPrompt && (
@@ -279,7 +280,7 @@ const Header = () => {
 
               {/* Mobile CTA Buttons */}
               <div className="pt-4 space-y-3 border-t border-gray-200 mt-4">
-                <a
+                <Link
                   href="tel:+8801777276072"
                   className="flex items-center justify-center space-x-3 bg-blue-500 text-white px-6 py-3.5 rounded-full font-semibold transition-all duration-300"
                   style={{ fontFamily: "Noto Sans Bengali, Arial, sans-serif" }}
@@ -287,7 +288,7 @@ const Header = () => {
                 >
                   <Phone className="w-5 h-5" />
                   <span>এখনই কল করুন</span>
-                </a>
+                </Link>
 
                 <button
                   onClick={() => {
