@@ -83,7 +83,7 @@ export default function Sidebar({ activeTab, setActiveTab, handleLogout, sidebar
                 icon={<Calendar size={20} />}
                 label="Appointments"
                 tabName="appointments"
-                badge="4"
+              
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 setSidebarOpen={setSidebarOpen}

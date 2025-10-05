@@ -58,33 +58,68 @@ const AppointmentModal = () => {
     { time: 'বিকাল ৩:৩০ - ৫:০০', seats: 2 },
   ];
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simple validation
+    setError(null);
+    setSuccessMessage(null);
+
     for (const key in formData) {
       if (formData[key] === '') {
-        alert('অনুগ্রহ করে সকল তথ্য পূরণ করুন।');
+        setError('অনুগ্রহ করে সকল তথ্য পূরণ করুন।');
         return;
       }
     }
-    console.log('Appointment Data:', formData);
-    alert('আপনার অ্যাপয়েন্টমেন্ট সফলভাবে বুক করা হয়েছে!');
-    closeModal();
-    // Reset form
-    setFormData({
-      service: '',
-      appointmentDate: '',
-      appointmentTime: '',
-      patientName: '',
-      mobileNumber: '',
-      age: '',
-      gender: '',
-    });
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong');
+      }
+
+      setSuccessMessage('আপনার অ্যাপয়েন্টমেন্ট সফলভাবে বুক করা হয়েছে!');
+      
+      // Reset form
+      setFormData({
+        service: '',
+        appointmentDate: '',
+        appointmentTime: '',
+        patientName: '',
+        mobileNumber: '',
+        age: '',
+        gender: '',
+      });
+
+      setTimeout(() => {
+        closeModal();
+        setSuccessMessage('');
+      }, 2000); // Close modal after 2 seconds
+
+    } catch (err) {
+      setError(err.message);
+      console.error('Submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isModalOpen) return null;
@@ -117,6 +152,7 @@ const AppointmentModal = () => {
               value={formData.service}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              disabled={isSubmitting}
             >
               <option value="" disabled>
                 সেবা নির্বাচন করুন
@@ -143,6 +179,7 @@ const AppointmentModal = () => {
               value={formData.appointmentDate}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              disabled={isSubmitting}
             >
               <option value="" disabled>
                 তারিখ নির্বাচন করুন
@@ -169,6 +206,7 @@ const AppointmentModal = () => {
               value={formData.appointmentTime}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              disabled={isSubmitting}
             >
               <option value="" disabled>
                 সময় নির্বাচন করুন
@@ -205,6 +243,7 @@ const AppointmentModal = () => {
               onChange={handleChange}
               placeholder="আপনার সম্পূর্ণ নাম লিখুন"
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -224,6 +263,7 @@ const AppointmentModal = () => {
               onChange={handleChange}
               placeholder="একটি সক্রিয় মোবাইল নম্বর দিন"
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -244,6 +284,7 @@ const AppointmentModal = () => {
                 onChange={handleChange}
                 placeholder="বয়স"
                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+                disabled={isSubmitting}
               />
             </div>
             <div>
@@ -259,6 +300,7 @@ const AppointmentModal = () => {
                 value={formData.gender}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+                disabled={isSubmitting}
               >
                 <option value="" disabled>
                   নির্বাচন করুন
@@ -270,12 +312,25 @@ const AppointmentModal = () => {
             </div>
           </div>
 
+          {/* Error and Success Messages */}
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
+          {successMessage && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+              <span className="block sm:inline">{successMessage}</span>
+            </div>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-[#41a815] text-white font-bold py-3 px-4 rounded-md hover:bg-teal-700 focus:outline-none  transition-transform transform hover:scale-105 shadow-lg"
+            disabled={isSubmitting}
+            className="w-full bg-[#41a815] text-white font-bold py-3 px-4 rounded-md hover:bg-teal-700 focus:outline-none transition-transform transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            সাবমিট করুন
+            {isSubmitting ? 'সাবমিট করা হচ্ছে...' : 'সাবমিট করুন'}
           </button>
         </form>
       </div>
