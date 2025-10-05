@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #fff; /* neutral-grey */
+    color: rgb(70, 96, 112); /* text-color */
+    font-family: var(--font-noto-sans-bengali);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-hind-siliguri);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Custom Swiper Pagination Styles */
+.swiper-pagination-custom .swiper-pagination-bullet {
+    background-color: #4a5568; /* gray-600 */
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+}
+
+.swiper-pagination-custom .swiper-pagination-bullet-active {
+    background-color: #1f2937; /* gray-800 */
+    opacity: 1;
+    width: 20px;
+    border-radius: 5px;
+}
+.swiper-pagination-custom, .swiper-pagination-bullets-dynamic, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal{
+    transform: translateX(0) !important;
+}
