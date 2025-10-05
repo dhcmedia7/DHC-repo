@@ -3,13 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { ChevronRight, Search, Home } from "lucide-react";
 
-export const metadata = {
-  title: 'হোমিওপ্যাথিক রেপার্টরি - দরদী হেলথ কেয়ার (DHC)',
-  description: 'দরদী হেলথ কেয়ার (DHC) এর হোমিওপ্যাথিক রেপার্টরি ব্যবহার করে লক্ষণ অনুযায়ী চিকিৎসা সম্পর্কে জানুন। আমাদের বিস্তৃত রেপার্টরি থেকে সঠিক সমাধান খুঁজুন।',
-  alternates: {
-    canonical: '/repertory',
-  },
-};
+
 
 const RepertoryPage = () => {
   const [repertoryData, setRepertoryData] = useState([]);
