@@ -1,5 +1,4 @@
 import React from 'react';
-import { Hand, Zap, Droplets, HeartPulse } from 'lucide-react';
 import Image from 'next/image';
 
 const Services = () => {

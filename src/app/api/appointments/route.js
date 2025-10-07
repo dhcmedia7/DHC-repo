@@ -56,9 +56,9 @@ export async function POST(req) {
     // Send email notification
     try {
       await resend.emails.send({
-        from: 'noreply@dorodihealthcare.com', // Must be a verified domain in Resend
-        to: 'dhcmediabd@gmail.com',
-        subject: 'New Appointment Booking',
+        from: "Dorodi Healthcare <noreply@dorodihealthcare.com>", // Must be a verified domain in Resend
+        to: "dhcmediabd@gmail.com",
+        subject: "New Appointment Booking",
         html: `
           <h1>New Appointment Details</h1>
           <p><strong>Service:</strong> ${service}</p>

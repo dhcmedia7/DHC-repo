@@ -2,6 +2,7 @@ import { Noto_Sans_Bengali, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { AppointmentProvider } from "@/context/AppointmentContext";
+import Script from "next/script";
 
 const noto = Noto_Sans_Bengali({
   subsets: ["bengali"],
@@ -52,6 +53,30 @@ export default function RootLayout({ children }) {
         <AppointmentProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
         </AppointmentProvider>
+        <div id="fb-root"></div>
+        <div id="fb-customer-chat" className="fb-customerchat"></div>
+        <Script id="messenger-chat-init" strategy="afterInteractive">
+          {`
+            var chatbox = document.getElementById('fb-customer-chat');
+            chatbox.setAttribute("page_id", "113974433487554");
+            chatbox.setAttribute("attribution", "biz_inbox");
+
+            window.fbAsyncInit = function() {
+              FB.init({
+                xfbml            : true,
+                version          : 'v19.0'
+              });
+            };
+
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+          `}
+        </Script>
       </body>
     </html>
   );

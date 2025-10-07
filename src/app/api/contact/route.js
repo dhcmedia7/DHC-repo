@@ -15,9 +15,9 @@ export async function POST(req) {
 
     // Send email notification
     await resend.emails.send({
-      from: 'noreply@dorodihealthcare.com', // Must be a verified domain in Resend
-      to: 'dhcmediabd@gmail.com',
-      subject: 'New Contact Form Submission',
+      from: "Dorodi Healthcare <noreply@dorodihealthcare.com>", // Must be a verified domain in Resend
+      to: "dhcmediabd@gmail.com",
+      subject: "New Contact Form Submission",
       reply_to: `"${name}" <${phone}@unknown.com>`, // A trick to have a name on the reply-to
       html: `
         <h1>New Contact Form Submission</h1>
