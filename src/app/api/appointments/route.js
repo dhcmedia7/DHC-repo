@@ -1,6 +1,9 @@
 
 import clientPromise from "@/app/lib/mongodb";
 import { NextResponse } from "next/server";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
@@ -49,6 +52,28 @@ export async function POST(req) {
     };
 
     await collection.insertOne(newAppointment);
+
+    // Send email notification
+    try {
+      await resend.emails.send({
+        from: 'noreply@dorodihealthcare.com', // Must be a verified domain in Resend
+        to: 'dhcmediabd@gmail.com',
+        subject: 'New Appointment Booking',
+        html: `
+          <h1>New Appointment Details</h1>
+          <p><strong>Service:</strong> ${service}</p>
+          <p><strong>Date:</strong> ${appointmentDate}</p>
+          <p><strong>Time:</strong> ${appointmentTime}</p>
+          <p><strong>Patient Name:</strong> ${patientName}</p>
+          <p><strong>Mobile:</strong> ${mobileNumber}</p>
+          <p><strong>Age:</strong> ${age}</p>
+          <p><strong>Gender:</strong> ${gender}</p>
+        `,
+      });
+    } catch (emailError) {
+      console.error("Email sending error:", emailError);
+      // Don't block the response for email error, just log it
+    }
 
     return NextResponse.json(
       { message: "Appointment created successfully" },

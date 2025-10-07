@@ -23,13 +23,6 @@ const stats = [
     color: 'from-emerald-500 to-emerald-600',
   },
   {
-    title: 'Revenue',
-    value: '$12,450',
-    change: '+15%',
-    icon: <DollarSign className="w-6 h-6" />,
-    color: 'from-purple-500 to-purple-600',
-  },
-  {
     title: 'Blog Posts',
     value: '24',
     change: '+3%',

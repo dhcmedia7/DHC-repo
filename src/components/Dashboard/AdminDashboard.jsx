@@ -6,58 +6,26 @@ import DashboardHome from './components/DashboardHome';
 import AppointmentManager from './components/AppointmentManager';
 import ProductManager from './components/ProductManager';
 import BlogManager from './components/BlogManager';
+import TimeSlotManager from './components/TimeSlotManager';
 
 export default function AdminDashboard({ handleLogout }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [formData, setFormData] = useState({
+  const [productFormData, setProductFormData] = useState({
     productName: '',
     productPrice: '',
     productDescription: '',
-    blogTitle: '',
-    blogContent: '',
-    blogCategory: '',
-    blogTags: '',
+    productImages: [],
   });
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const handleProductInputChange = (field, value) => {
+    setProductFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleProductSubmit = () => {
-    console.log('Product submitted:', {
-      name: formData.productName,
-      price: formData.productPrice,
-      description: formData.productDescription,
-    });
-    // Reset form
-    setFormData((prev) => ({
-      ...prev,
-      productName: '',
-      productPrice: '',
-      productDescription: '',
-    }));
-  };
-
-  const handleBlogSubmit = () => {
-    console.log('Blog submitted:', {
-      title: formData.blogTitle,
-      content: formData.blogContent,
-      category: formData.blogCategory,
-      tags: formData.blogTags,
-    });
-    // Reset form
-    setFormData((prev) => ({
-      ...prev,
-      blogTitle: '',
-      blogContent: '',
-      blogCategory: '',
-      blogTags: '',
-    }));
+  const handleProductSubmit = async () => {
+    // Logic to submit the product will be added here later
+    console.log('Submitting product:', productFormData);
   };
 
   const renderContent = () => {
@@ -67,9 +35,15 @@ export default function AdminDashboard({ handleLogout }) {
       case 'appointments':
         return <AppointmentManager searchQuery={searchQuery} setSearchQuery={setSearchQuery} />;
       case 'products':
-        return <ProductManager formData={formData} handleInputChange={handleInputChange} handleProductSubmit={handleProductSubmit} />;
+        return <ProductManager
+          formData={productFormData}
+          handleInputChange={handleProductInputChange}
+          handleProductSubmit={handleProductSubmit}
+        />;
       case 'blogs':
-        return <BlogManager formData={formData} handleInputChange={handleInputChange} handleBlogSubmit={handleBlogSubmit} />;
+        return <BlogManager />;
+      case 'timeslots':
+        return <TimeSlotManager />;
       default:
         return <DashboardHome />;
     }

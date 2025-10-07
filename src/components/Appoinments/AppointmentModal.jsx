@@ -15,6 +15,8 @@ const AppointmentModal = () => {
   });
 
   const [availableDates, setAvailableDates] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [timeSlotsLoading, setTimeSlotsLoading] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -26,6 +28,30 @@ const AppointmentModal = () => {
       document.body.style.overflow = 'unset';
     };
   }, [isModalOpen]);
+
+  // Fetch time slots based on selected date
+  useEffect(() => {
+    if (formData.appointmentDate) {
+      const fetchTimeSlots = async () => {
+        try {
+          setTimeSlotsLoading(true);
+          const response = await fetch(`/api/timeslots?date=${formData.appointmentDate}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch time slots');
+          }
+          const data = await response.json();
+          setTimeSlots(data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setTimeSlotsLoading(false);
+        }
+      };
+      fetchTimeSlots();
+      // Reset time when date changes
+      setFormData(prev => ({ ...prev, appointmentTime: '' }));
+    }
+  }, [formData.appointmentDate]);
 
   useEffect(() => {
     // Function to get the next 3 days in Bengali
@@ -51,12 +77,7 @@ const AppointmentModal = () => {
     setAvailableDates(getNextThreeDays());
   }, []);
 
-  const timeSlots = [
-    { time: 'সকাল ১০:০০ - ১১:৩০', seats: 5 },
-    { time: 'সকাল ১১:৩০ - দুপুর ১:০০', seats: 3 },
-    { time: 'দুপুর ২:০০ - ৩:৩০', seats: 5 },
-    { time: 'বিকাল ৩:৩০ - ৫:০০', seats: 2 },
-  ];
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -206,24 +227,29 @@ const AppointmentModal = () => {
               value={formData.appointmentTime}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !formData.appointmentDate}
             >
               <option value="" disabled>
-                সময় নির্বাচন করুন
+                {timeSlotsLoading 
+                    ? 'লোড হচ্ছে...' 
+                    : (formData.appointmentDate ? 'সময় নির্বাচন করুন' : 'আগে তারিখ নির্বাচন করুন')}
               </option>
-              {timeSlots.map((slot) => (
-                <option
-                  key={slot.time}
-                  value={slot.time}
-                  disabled={slot.seats === 0}
-                >
-                  {slot.time} (
-                  {slot.seats > 0
-                    ? `${slot.seats}টি সিট খালি আছে`
-                    : "কোনো সিট খালি নেই"}
-                  )
-                </option>
-              ))}
+              {!timeSlotsLoading && timeSlots.map((slot) => {
+                const availableSeats = slot.maxPatients - slot.bookedPatients;
+                return (
+                  <option
+                    key={slot.id}
+                    value={slot.time}
+                    disabled={availableSeats === 0}
+                  >
+                    {slot.time} (
+                    {availableSeats > 0
+                      ? `${availableSeats}টি সিট খালি আছে`
+                      : "কোনো সিট খালি নেই"}
+                    )
+                  </option>
+                )
+              })}
             </select>
           </div>
 

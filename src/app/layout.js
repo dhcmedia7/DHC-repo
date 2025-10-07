@@ -17,16 +17,16 @@ const hind = Hind_Siliguri({
 
 export const metadata = {
   title: {
-    template: "দরদী হেলথ কেয়ার (DHC)",
+    template: "DHC - দরদী হেলথ কেয়ার",
     default:
-      "দরদী হেলথ কেয়ার (DHC) Dorodi Health Care- প্রাকৃতিক উপায়ে ব্যথা নিরাময় ও সুস্বাস্থ্য",
+      "DHC - দরদী হেলথ কেয়ার (DHC) Dorodi Health Care- প্রাকৃতিক উপায়ে ব্যথা নিরাময় ও সুস্বাস্থ্য",
   },
   description:
-    "দরদী হেলথ কেয়ার (DHC) - অভিজ্ঞ চিকিৎসকের মাধ্যমে আকুপাংচার, হিজামা, এবং ন্যাচারোপ্যাথি চিকিৎসাসেবা নিন। পার্শ্বপ্রতিক্রিয়াহীন প্রাকৃতিক চিকিৎসায় সুস্থ থাকুন।",
+    " DHC - দরদী হেলথ কেয়ার (DHC) - অভিজ্ঞ চিকিৎসকের মাধ্যমে আকুপাংচার, হিজামা, এবং ন্যাচারোপ্যাথি চিকিৎসাসেবা নিন। পার্শ্বপ্রতিক্রিয়াহীন প্রাকৃতিক চিকিৎসায় সুস্থ থাকুন।",
   keywords: [
+    "DHC",
     "দরদী হেলথ কেয়ার",
     "Dorodi Health Care",
-    "DHC",
     "আকুপাংচার",
     "হিজামা",
     "ন্যাচারোপ্যাথি",
@@ -37,9 +37,9 @@ export const metadata = {
     "Naturopathy",
     "Pain Relief",
   ],
-  authors: [{ name: "দরদী হেলথ কেয়ার" }],
-  creator: "দরদী হেলথ কেয়ার",
-  publisher: "দরদী হেলথ কেয়ার",
+  authors: [{ name: "DHC - দরদী হেলথ কেয়ার" }],
+  creator: " DHC - দরদী হেলথ কেয়ার",
+  publisher: "DHC - দরদী হেলথ কেয়ার",
 };
 
 export default function RootLayout({ children }) {

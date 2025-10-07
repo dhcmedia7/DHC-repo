@@ -6,6 +6,7 @@ import {
   LogOut,
   Calendar,
   X,
+  Clock,
 } from 'lucide-react';
 
 const NavItem = ({ icon, label, tabName, badge, activeTab, setActiveTab, setSidebarOpen }) => (
@@ -84,6 +85,14 @@ export default function Sidebar({ activeTab, setActiveTab, handleLogout, sidebar
                 label="Appointments"
                 tabName="appointments"
               
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                setSidebarOpen={setSidebarOpen}
+              />
+              <NavItem
+                icon={<Clock size={20} />}
+                label="Time Slots"
+                tabName="timeslots"
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 setSidebarOpen={setSidebarOpen}
