@@ -2,7 +2,8 @@ import React from "react";
 import { Calendar, Phone } from "lucide-react";
 import Image from "next/image";
 import AppoinButton from "../Appoinments/AppoinButton";
-const videoHome = "/images/hero.webm";
+const videoHomeWebm = "/images/hero.webm";
+const videoHomeMp4 = "/images/hero.mp4";
 
 const Hero = () => {
 
@@ -74,9 +75,11 @@ const Hero = () => {
               autoPlay
               loop
               muted
+              playsInline
               className="myVideo rounded-md"
             >
-              <source src={videoHome} type="video/webm" />
+              <source src={videoHomeWebm} type="video/webm" />
+              <source src={videoHomeMp4} type="video/mp4" />
             </video>
           </div>
         </div>
