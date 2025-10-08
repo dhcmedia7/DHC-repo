@@ -86,7 +86,7 @@ const RelatedPosts = ({ posts }) => (
 );
 
 const SingleBlogPage = async ({ params }) => {
-    const slug = params.slug;
+    const slug = await params.slug;
     const blog = await getSingleBlog(slug);
 
     if (!blog) {
