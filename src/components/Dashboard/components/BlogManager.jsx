@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Plus, UploadCloud, X, Edit, Trash2, Loader2 } from 'lucide-react';
+import imageCompression from 'browser-image-compression';
 
 export default function BlogManager() {
   const [blogs, setBlogs] = useState([]);
@@ -16,6 +17,7 @@ export default function BlogManager() {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
   const [success, setSuccess] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState(null);
@@ -42,15 +44,34 @@ export default function BlogManager() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (!file) return;
+
+    setIsCompressing(true);
+    setError(null);
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
         setImagePreview(reader.result);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
+
+    } catch (compressionError) {
+      console.error('Image compression error:', compressionError);
+      setError('Failed to compress image. Please try a different image.');
+    } finally {
+      setIsCompressing(false);
     }
   };
 
@@ -184,10 +205,16 @@ export default function BlogManager() {
                           <UploadCloud className="w-6 h-6 text-gray-400" />
                           </div>
                           <p className="text-gray-600">Click to upload a featured image</p>
-                          <p className='text-xs text-gray-500'>PNG, JPG, WEBP up to 5MB</p>
+                          <p className='text-xs text-gray-500'>PNG, JPG, WEBP (Max 1MB)</p>
                       </div>
                       <input id='image-upload' type='file' accept='image/png, image/jpeg, image/webp' className='hidden' onChange={handleImageChange} />
                   </label>
+              )}
+               {isCompressing && (
+                <div className="flex items-center justify-center mt-4 text-gray-600">
+                  <Loader2 className="animate-spin mr-2" />
+                  <p>Compressing image, please wait...</p>
+                </div>
               )}
             </div>
 
@@ -238,8 +265,8 @@ export default function BlogManager() {
           <div className="flex gap-4 pt-2">
             <button
               onClick={handleSubmit}
-              disabled={isSaving}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+              disabled={isSaving || isCompressing}
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isSaving ? <><Loader2 className="animate-spin mr-2" />{formData._id ? 'Updating...' : 'Publishing...'}</> : (formData._id ? 'Update Post' : 'Publish Post')}
             </button>
