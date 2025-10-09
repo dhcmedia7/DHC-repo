@@ -11,7 +11,7 @@ let clientPromise;
 
 if (!client) {
   client = new MongoClient(uri, {
-    serverSelectionTimeoutMS: 10000,
+    serverSelectionTimeoutMS: 30000,
   });
   clientPromise = client.connect();
 }
