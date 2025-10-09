@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import clientPromise from "@/app/lib/mongodb";
 import { v2 as cloudinary } from 'cloudinary';
 import { ObjectId } from 'mongodb';
+import { revalidatePath } from 'next/cache';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -53,6 +54,13 @@ export async function POST(req) {
     };
 
     await collection.insertOne(newBlog);
+    
+    // try {
+    //   revalidatePath('/blog');
+    //   revalidatePath(`/blog/${slug}`);
+    // } catch (e) {
+    //   console.error('Revalidation failed:', e)
+    // }
 
     return NextResponse.json({ message: "Blog published successfully", blog: newBlog }, { status: 201 });
 
@@ -99,7 +107,9 @@ export async function GET() {
       const client = await clientPromise;
       const db = client.db("dorodi_health");
       const collection = db.collection("blogs");
-  
+
+      const existingBlog = await collection.findOne({ _id: new ObjectId(id) });
+      
       const updateData = {
         title,
         content,
@@ -113,6 +123,15 @@ export async function GET() {
       }
   
       await collection.updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+
+      // try {
+      //   if(existingBlog && existingBlog.slug){
+      //     revalidatePath(`/blog/${existingBlog.slug}`);
+      //   }
+      //   revalidatePath('/blog');
+      // } catch (e) {
+      //   console.error('Revalidation failed:', e)
+      // }
   
       return NextResponse.json({ message: "Blog updated successfully" }, { status: 200 });
   
@@ -134,8 +153,19 @@ export async function GET() {
       const client = await clientPromise;
       const db = client.db("dorodi_health");
       const collection = db.collection("blogs");
+
+      const blogToDelete = await collection.findOne({ _id: new ObjectId(id) });
   
       await collection.deleteOne({ _id: new ObjectId(id) });
+
+      // try {
+      //   if(blogToDelete && blogToDelete.slug){
+      //     revalidatePath(`/blog/${blogToDelete.slug}`);
+      //   }
+      //   revalidatePath('/blog');
+      // } catch (e) {
+      //   console.error('Revalidation failed:', e)
+      // }
   
       return NextResponse.json({ message: "Blog deleted successfully" }, { status: 200 });
   

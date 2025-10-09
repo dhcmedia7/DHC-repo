@@ -4,6 +4,8 @@ import clientPromise from "@/app/lib/mongodb";
 import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
+export const revalidate = 60;
+
 export const metadata = {
   title: 'স্বাস্থ্য ব্লগ - দরদী হেলথ কেয়ার (DHC)',
   description: 'দরদী হেলথ কেয়ার (DHC) এর স্বাস্থ্য ব্লগে প্রাকৃতিক চিকিৎসা, ব্যথা নিরাময়, এবং স্বাস্থ্যকর জীবনযাপন নিয়ে লেখা পড়ুন। আকুপাংচার, হিজামা ও স্বাস্থ্য টিপস।',

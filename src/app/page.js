@@ -9,6 +9,8 @@ import CTA from "@/components/Home/CTA";
 
 import clientPromise from "@/app/lib/mongodb";
 
+export const revalidate = 60;
+
 export const metadata = {
   title:
     "DHC - দরদী হেলথ কেয়ার | সেরা প্রাকৃতিক চিকিৎসা কেন্দ্র | ঢাকা, বাংলাদেশ",

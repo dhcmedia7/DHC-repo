@@ -9,7 +9,11 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  User, 
+  Phone, 
+  Calendar, 
+  Briefcase
 } from 'lucide-react';
 import { useAppointments } from '@/hooks/useAppointments';
 
@@ -71,6 +75,89 @@ export default function AppointmentManager({ searchQuery, setSearchQuery }) {
     );
   }, [appointments, searchQuery]);
 
+  const renderContent = () => {
+    if (loading) {
+      return <div className="text-center p-8 text-gray-500">Loading appointments...</div>;
+    }
+    if (error) {
+      return <div className="text-center p-8 text-red-500">Error: {error}</div>;
+    }
+    if (filteredAppointments.length === 0) {
+      return <div className="text-center p-8 text-gray-500">No appointments found.</div>;
+    }
+    return (
+      <>
+        {/* Desktop Table View */}
+        <div className="overflow-x-auto hidden md:block">
+          <table className="w-full">
+            <thead className="bg-gray-50/50">
+              <tr>
+                <th className="text-left p-4 font-semibold text-gray-900">Patient</th>
+                <th className="text-left p-4 font-semibold text-gray-900">Service</th>
+                <th className="text-left p-4 font-semibold text-gray-900">Date & Time</th>
+                <th className="text-left p-4 font-semibold text-gray-900">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAppointments.map((appt) => (
+                <tr key={appt._id} className="border-t border-gray-100 hover:bg-gray-50/30 transition-colors">
+                  <td className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                        {getInitials(appt.patientName)}
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-900">{appt.patientName}</span>
+                        <div className="text-sm text-gray-600">{appt.mobileNumber}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-4 text-gray-700">{appt.service}</td>
+                  <td className="p-4">
+                    <div className="text-gray-900 font-medium">{appt.appointmentTime}</div>
+                    <div className="text-sm text-gray-600">
+                      {new Date(appt.appointmentDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                  </td>
+                  <td className="p-4"><StatusBadge status={appt.status} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="block md:hidden">
+          <div className="space-y-4 p-4">
+            {filteredAppointments.map((appt) => (
+              <div key={appt._id} className="bg-white rounded-xl shadow-md p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
+                      {getInitials(appt.patientName)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-gray-800">{appt.patientName}</p>
+                      <p className="text-sm text-gray-600 flex items-center"><Phone className="w-3 h-3 mr-1.5"/>{appt.mobileNumber}</p>
+                    </div>
+                  </div>
+                  <StatusBadge status={appt.status} />
+                </div>
+                
+                <div className="space-y-2 text-sm">
+                  <p className="flex items-center text-gray-700"><Briefcase className="w-4 h-4 mr-2 text-gray-500"/>{appt.service}</p>
+                  <p className="flex items-center text-gray-700"><Calendar className="w-4 h-4 mr-2 text-gray-500"/>
+                    {new Date(appt.appointmentDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} at {appt.appointmentTime}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -98,98 +185,7 @@ export default function AppointmentManager({ searchQuery, setSearchQuery }) {
       </div>
 
       <div className="bg-white/70 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50/50">
-              <tr>
-                <th className="text-left p-4 font-semibold text-gray-900">
-                  Patient
-                </th>
-                <th className="text-left p-4 font-semibold text-gray-900">
-                  Service
-                </th>
-                <th className="text-left p-4 font-semibold text-gray-900">
-                  Date & Time
-                </th>
-                <th className="text-left p-4 font-semibold text-gray-900">
-                  Status
-                </th>
-                {/* <th className="text-left p-4 font-semibold text-gray-900">
-                  Actions
-                </th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="5" className="text-center p-8 text-gray-500">
-                    Loading appointments...
-                  </td>
-                </tr>
-              ) : error ? (
-                 <tr>
-                  <td colSpan="5" className="text-center p-8 text-red-500">
-                    Error: {error}
-                  </td>
-                </tr>
-              ) : filteredAppointments.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="text-center p-8 text-gray-500">
-                    No appointments found.
-                  </td>
-                </tr>
-              ) : (
-                filteredAppointments.map((appt) => (
-                  <tr
-                    key={appt._id}
-                    className="border-t border-gray-100 hover:bg-gray-50/30 transition-colors"
-                  >
-                    <td className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                          {getInitials(appt.patientName)}
-                        </div>
-                        <div>
-                           <span className="font-medium text-gray-900">
-                            {appt.patientName}
-                          </span>
-                          <div className="text-sm text-gray-600">{appt.mobileNumber}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4 text-gray-700">{appt.service}</td>
-                    <td className="p-4">
-                      <div className="text-gray-900 font-medium">{appt.appointmentTime}</div>
-                      <div className="text-sm text-gray-600">
-                        {new Date(appt.appointmentDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <StatusBadge status={appt.status} />
-                    </td>
-                    {/* <td className="p-4">
-                      <div className="flex items-center space-x-1">
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View Details">
-                          <Eye className="w-4 h-4 text-gray-600" />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit Appointment">
-                          <Edit3 className="w-4 h-4 text-blue-600" />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Delete Appointment">
-                          <Trash2 className="w-4 h-4 text-red-600" />
-                        </button>
-                      </div>
-                    </td> */}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        {renderContent()}
       </div>
     </div>
   );

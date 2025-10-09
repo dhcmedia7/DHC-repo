@@ -6,6 +6,8 @@ import { Calendar, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+export const revalidate = 60;
+
 async function getSingleBlog(slug) {
     try {
         const client = await clientPromise;
