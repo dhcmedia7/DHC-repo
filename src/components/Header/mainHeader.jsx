@@ -75,7 +75,7 @@ const Header = () => {
       hasDropdown: true,
       subItems: [
         { name: "ব্লগ", href: "/blog" },
-        { name: "রেপার্টরি", href: "/repertory" },
+        { name: "অ্যাকুপ্রেশার রেপার্টরি", href: "#" },
         { name: "প্রশ্নোত্তর", href: "/fqa" },
         { name: "যোগাযোগ", href: "/contact" },
         { name: "সহায়তা", href: "/support" },

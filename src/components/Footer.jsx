@@ -66,7 +66,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/repertory"
+                  href="#"
                   className="hover:text-blue-400 transition-colors"
                 >
                   রেপার্টরি
@@ -125,10 +125,10 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <Phone size={20} />
                 <a
-                  href="tel:+8801234567890"
+                  href="tel:+8801777276072"
                   className="hover:text-blue-400 transition-colors"
                 >
-                  +৮৮ ০১২৩৪ ৫৬৭৮৯০
+                  017 77 27 60 72
                 </a>
               </div>
               <div className="flex items-center gap-3">
@@ -142,18 +142,13 @@ const Footer = () => {
               </div>
             </div>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="hover:text-blue-400 transition-colors">
+              <Link
+                href="https://www.facebook.com/dorodihealthcare"
+                className="hover:text-blue-400 transition-colors flex gap-2"
+              >
                 <Facebook size={22} />
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                <Twitter size={22} />
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                <Instagram size={22} />
-              </a>
-              <a href="#" className="hover:text-blue-400 transition-colors">
-                <Linkedin size={22} />
-              </a>
+                <span>Facebook</span>
+              </Link>
             </div>
           </div>
         </div>
